@@ -6,7 +6,8 @@ namespace InfSec
     {
         static void Main(string[] args)
         {
-            TestDH();
+            //TestDH();
+            TestRSA();
         }
 
         static void TestDH()
@@ -43,6 +44,31 @@ namespace InfSec
                               $"Bob: {Bob.Key}\n");
 
             Console.WriteLine($"Are keys equals: {Alice.Key == Bob.Key}");
+        }
+
+        static void TestRSA()
+        {
+            var rsa = new AlgorithmRSA(3, 11);
+            
+            rsa.GenerateKeys();
+
+            Console.WriteLine($"Generated keys:\n" +
+                              $"Public: {rsa.PublicKey.EXP} - {rsa.PublicKey.VALUE}\n" +
+                              $"Private: {rsa.PrivateKey.EXP} - {rsa.PrivateKey.VALUE}\n");
+
+            var message = 24;
+
+            Console.WriteLine($"Message to encrypt: {message}");
+
+            var encryptedMessage = rsa.Encryption(message);
+            
+            Console.WriteLine($"Encrypted message: {encryptedMessage}");
+            
+            var decryptedMessage = rsa.Decryption(encryptedMessage);
+            
+            Console.WriteLine($"Decrypted message: {decryptedMessage}");
+
+            Console.WriteLine($"Are messages equals: {message == decryptedMessage}");
         }
     }
 }
