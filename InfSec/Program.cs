@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection.Metadata.Ecma335;
+using InfSec.Caesar;
 
 namespace InfSec
 {
@@ -10,9 +11,15 @@ namespace InfSec
             var rsaManager = new RSAManager();
             var dhManager = new DHManager();
             
+            var caesar = new CaesarAlgorithm();
+            
+            var encr = caesar.Encryption("hello", 2);
+            var decr = caesar.Decryption(encr, 2);
+            Console.WriteLine($"{encr}\n{decr}");
+
             //rsaManager.Execute();
             //dhManager.Execute();
-            ExecuteAll();
+            //ExecuteAll();
         }
 
         static void ExecuteAll()
