@@ -13,14 +13,14 @@ namespace InfSec
 
         public override void Execute()
         {
-            var rsa = new AlgorithmRSA(_settings.RSA.P, _settings.RSA.Q);
+            var rsa = new AlgorithmRSA();
             var message = _settings.RSA.Message;
             
             rsa.GenerateKeys();
 
             Console.WriteLine($"Generated keys:\n" +
-                              $"Public: {rsa.PublicKey.EXP} - {rsa.PublicKey.VALUE}\n" +
-                              $"Private: {rsa.PrivateKey.EXP} - {rsa.PrivateKey.VALUE}\n");
+                              $"Public: {rsa.PK.EXP} - {rsa.PK.VALUE}\n" +
+                              $"Private: {rsa.SK.EXP} - {rsa.SK.VALUE}\n");
             
             Console.WriteLine($"Message to encrypt: {message}");
 

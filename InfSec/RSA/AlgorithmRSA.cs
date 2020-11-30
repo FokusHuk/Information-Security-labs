@@ -1,55 +1,57 @@
 ﻿using System;
+using System.Globalization;
+using System.Numerics;
 
 namespace InfSec
 {
     public class AlgorithmRSA
     {
-        public AlgorithmRSA(long p, long q)
+        public AlgorithmRSA()
         {
-            P = p;
-            Q = q;
+            
         }
 
         public void GenerateKeys()
         {
-            var n = P * Q;
-            var eulerFunc = (P - 1) * (Q - 1);
+            var p = SimpleNumbersGenerator.GetBigSimpleNumber();
+            var q = SimpleNumbersGenerator.GetBigSimpleNumber();
+            var n = p * q;
+            var eulerFunc = (p - 1) * (q - 1);
             var e = calculate_E(eulerFunc);
             var d = Calculate_D(e, eulerFunc);
 
-            PublicKey = new KeyForRSA(e, n);
-            PrivateKey = new KeyForRSA(d, n);
+            PK = new KeyForRSA(e, n);
+            SK = new KeyForRSA(d, n);
         }
 
-        public long Encryption(long messageToEncrypt)
+        public BigInteger Encryption(BigInteger messageToEncrypt)
         {
-            return (long)(Math.Pow(messageToEncrypt, PublicKey.EXP) % PublicKey.VALUE);
+            return BigInteger.ModPow(messageToEncrypt, PK.EXP, PK.VALUE);
         }
 
-        public long Decryption(long encryptedMessage)
+        public BigInteger Decryption(BigInteger encryptedMessage)
         {
-            return (long)(Math.Pow(encryptedMessage, PrivateKey.EXP) % PrivateKey.VALUE);
+            return BigInteger.ModPow(encryptedMessage, SK.EXP, SK.VALUE);
         }
 
-        private long calculate_E(long eulerFunc)
+        private long calculate_E(BigInteger eulerFunc)
         {
-            long e = 1;
- 
-            for (long i = 2; i <= eulerFunc; i++)
-                if (isMutuallySimple(i, eulerFunc))
+            for (long e = 3; e <= eulerFunc; e += 2)
+                if (isMutuallySimple(e, eulerFunc))
                 {
-                    e = i;
-                    break;
+                    return e;
                 }
  
-            return e;
+            return 3;
         }
 
-        private bool isMutuallySimple(long num1, long num2)
+        private bool isMutuallySimple(BigInteger num1, BigInteger num2)
         {
-            var min = Math.Min(num1, num2);
-            
-            for (long i = 2; i <= min; i++)
+            BigInteger min = num1;
+            if (num2 < num1)
+                min = num2;
+
+            for (BigInteger i = 3; i <= min; i++)
             {
                 if (num1 % i == 0 && num2 % i == 0)
                     return false;
@@ -58,35 +60,33 @@ namespace InfSec
             return true;
         }
         
-        private long Calculate_D(long e, long eulerFunc)
+        private BigInteger Calculate_D(BigInteger e, BigInteger eulerFunc)
         {
-            long d = 3;
+            BigInteger d = 3;
 
             while (true)
             {
-                if ((e * d) % eulerFunc == 1)
+                if (BigInteger.ModPow(e * d, 1, eulerFunc) == 1)
                     break;
                 d++;
             }
 
             return d;
         }
-
-        public long P { get; }
-        public long Q { get; }
-        public KeyForRSA PublicKey { get; private set; }
-        public KeyForRSA PrivateKey { get; private set; }
+        
+        public KeyForRSA PK { get; private set; }
+        public KeyForRSA SK { get; private set; }
     }
 
     public class KeyForRSA
     {
-        public KeyForRSA(long exp, long value)
+        public KeyForRSA(BigInteger exp, BigInteger value)
         {
             EXP = exp;
             VALUE = value;
         }
         
-        public long EXP { get; }
-        public long VALUE { get; }
+        public BigInteger EXP { get; }
+        public BigInteger VALUE { get; }
     }
 }

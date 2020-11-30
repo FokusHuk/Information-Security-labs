@@ -13,10 +13,10 @@ namespace InfSec
             var dhManager = new DHManager(settings);
             var caesarManager = new CaesarManager(settings);
 
-            //rsaManager.Execute();
+            rsaManager.Execute();
             //dhManager.Execute();
             //caesarManager.Execute();
-            ExecuteAll(settings);
+            //ExecuteAll(settings);
         }
 
         static void ExecuteAll(InfSecSettings settings)

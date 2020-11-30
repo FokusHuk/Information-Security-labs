@@ -1,16 +1,14 @@
-﻿namespace InfSec
+﻿using System.Numerics;
+
+namespace InfSec
 {
     public class RSASettings
     {
-        public RSASettings(int p, int q, int message)
+        public RSASettings(BigInteger message)
         {
-            P = p;
-            Q = q;
             Message = message;
         }
         
-        public int P { get; }
-        public int Q { get; }
-        public int Message { get; }
+        public BigInteger Message { get; }
     }
 }
