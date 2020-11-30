@@ -7,23 +7,25 @@ namespace InfSec
     {
         static void Main(string[] args)
         {
-            var rsaManager = new RSAManager();
-            var dhManager = new DHManager();
-            var caesarManager = new CaesarManager();
+            var settings = InfSecSettings.FromJsonFile("./appsettings.json");
+            
+            var rsaManager = new RSAManager(settings);
+            var dhManager = new DHManager(settings);
+            var caesarManager = new CaesarManager(settings);
 
             //rsaManager.Execute();
             //dhManager.Execute();
-            caesarManager.Execute();
-            //ExecuteAll();
+            //caesarManager.Execute();
+            ExecuteAll(settings);
         }
 
-        static void ExecuteAll()
+        static void ExecuteAll(InfSecSettings settings)
         {
-            var algorithms = new IEncryptionAlgorithmManager[]
+            var algorithms = new EncryptionAlgorithmManager[]
             {
-                new RSAManager(),
-                new DHManager(),
-                new CaesarManager()
+                new RSAManager(settings),
+                new DHManager(settings),
+                new CaesarManager(settings)
             };
 
             foreach (var algorithm in algorithms)

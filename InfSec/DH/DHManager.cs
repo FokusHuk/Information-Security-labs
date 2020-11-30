@@ -2,19 +2,19 @@
 
 namespace InfSec
 {
-    public class DHManager: IEncryptionAlgorithmManager
+    public class DHManager: EncryptionAlgorithmManager
     {
-        public DHManager()
+        public DHManager(InfSecSettings settings) : base(settings)
         {
             Name = "DH";
         }
 
-        public string Name { get; }
+        public override string Name { get; }
 
-        public void Execute()
+        public override void Execute()
         {
-            var paramG = 32.0;
-            var paramP = 40.0;
+            var paramG = _settings.DH.G;
+            var paramP = _settings.DH.P;
 
             Console.WriteLine($"Parameter G: {paramG}\nParamter P: {paramP}\n");
             
