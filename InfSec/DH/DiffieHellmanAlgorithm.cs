@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Numerics;
 
 namespace InfSec
 {
     public class DiffieHellmanAlgorithm
     {
-        public DiffieHellmanAlgorithm(double paramG, double paramP)
+        public DiffieHellmanAlgorithm(BigInteger paramG, BigInteger paramP)
         {
             ParamG = paramG;
             ParamP = paramP;
@@ -13,22 +14,22 @@ namespace InfSec
         public void GenerateNumber()
         {
             var random = new Random();
-            LocalGeneratedParameter = random.Next(1, 10);
+            LocalGeneratedParameter = BigInteger.Parse(random.Next(int.MaxValue / 2, int.MaxValue).ToString());
         }
         
-        public double CalculateParameterToSend()
+        public BigInteger CalculateParameterToSend()
         {
-            return (Math.Pow(ParamG, LocalGeneratedParameter) % ParamP);
+            return BigInteger.ModPow(ParamG, LocalGeneratedParameter, ParamP);
         }
 
-        public void CalculateKey(double receivedParameter)
+        public void CalculateKey(BigInteger receivedParameter)
         {
-            Key = (Math.Pow(receivedParameter, LocalGeneratedParameter) % ParamP);
+            Key =  BigInteger.ModPow(receivedParameter, LocalGeneratedParameter, ParamP);
         }
 
-        public double ParamG { get; }
-        public double ParamP { get; }
-        public double LocalGeneratedParameter { get; private set; }
-        public double Key { get; private set; }
+        public BigInteger ParamG { get; }
+        public BigInteger ParamP { get; }
+        public BigInteger LocalGeneratedParameter { get; private set; }
+        public BigInteger Key { get; private set; }
     }
 }
