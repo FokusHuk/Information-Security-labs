@@ -24,6 +24,43 @@ namespace InfSec.Caesar
                 .Select(letter => displaceLetterDesc(letter, bias))
                 .ToArray());
         }
+
+        public string DecryptionByFrequency(string frequencyBase, string text, string language = "en")
+        {
+            _currentAlphabet = getAlphabet(language);
+            var baseFrequencies = getFrequencies(frequencyBase).ToArray();
+            var textFrequencies = getFrequencies(text).ToArray();
+            var frequencyDistribution = new Dictionary<int, int>();
+
+            for (int i = 0; i < textFrequencies.Count(); i++)
+            {
+                var currentBias = Math.Abs(_currentAlphabet.IndexOf(textFrequencies[i].Letter) -
+                                    _currentAlphabet.IndexOf(baseFrequencies[i].Letter));
+                if (frequencyDistribution.ContainsKey(currentBias))
+                    frequencyDistribution[currentBias]++;
+                else
+                    frequencyDistribution[currentBias] = 1;
+            }
+
+            var bias = frequencyDistribution
+                .OrderByDescending(e => e.Value)
+                .First()
+                .Key;
+
+            return Decryption(text, bias, language);
+        }
+        
+        private IEnumerable<LetterWithFrequency> getFrequencies(string text)
+        {
+            return text
+                .ToLower()
+                .ToCharArray()
+                .Where(c => Char.IsLetter(c))
+                .GroupBy(c => c)
+                .Select(g => new LetterWithFrequency(g.Key, g.Count()))
+                .OrderByDescending(s => s.Frequency)
+                .ToList();
+        }
         
         private char displaceLetterDesc(char letter, int bias)
         {
@@ -65,22 +102,22 @@ namespace InfSec.Caesar
                 : resultLetter;
         }
 
-        private IEnumerable<char> getAlphabet(string language)
+        private List<char> getAlphabet(string language)
         {
             if (language == "ru")
             {
                 return Enumerable
                     .Range('а', 'я' - 'а' + 1)
                     .Select(c => (char) c)
-                    .ToArray();
+                    .ToList();
             }
 
             return Enumerable
                 .Range('a', 'z' - 'a' + 1)
                 .Select(c => (char) c)
-                .ToArray();
+                .ToList();
         }
 
-        private IEnumerable<char> _currentAlphabet;
+        private List<char> _currentAlphabet;
     }
 }
