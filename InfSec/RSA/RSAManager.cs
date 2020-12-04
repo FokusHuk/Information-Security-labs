@@ -18,9 +18,11 @@ namespace InfSec.RSA
             
             rsa.GenerateKeys();
 
+            Console.WriteLine($"Calculated parameters:\n{rsa.CalculatedParameters}\n");
+
             Console.WriteLine($"Generated keys:\n" +
                               $"Public: {rsa.PK.EXP} - {rsa.PK.VALUE}\n" +
-                              $"Private: {rsa.SK.EXP} - {rsa.SK.VALUE}\n");
+                              $"Secret: {rsa.SK.EXP} - {rsa.SK.VALUE}\n");
             
             Console.WriteLine($"Message to encrypt: {message}");
 

@@ -20,6 +20,7 @@ namespace InfSec
 
             PK = new KeyForRSA(e, n);
             SK = new KeyForRSA(d, n);
+            CalculatedParameters = new CalculatedParameters(p, q, n, eulerFunc, e, d);
         }
 
         public BigInteger Encryption(BigInteger messageToEncrypt)
@@ -74,17 +75,7 @@ namespace InfSec
         
         public KeyForRSA PK { get; private set; }
         public KeyForRSA SK { get; private set; }
-    }
-
-    public class KeyForRSA
-    {
-        public KeyForRSA(BigInteger exp, BigInteger value)
-        {
-            EXP = exp;
-            VALUE = value;
-        }
         
-        public BigInteger EXP { get; }
-        public BigInteger VALUE { get; }
+        public CalculatedParameters CalculatedParameters { get; private set; }
     }
 }
