@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InfSec
+namespace InfSec.DH
 {
     public class DHManager: EncryptionAlgorithmManager
     {
