@@ -15,8 +15,10 @@
             var client = new SRPClient(factors, "user", "password");
             var server = new SRPServer(factors);
             
+            client.Connect(server);
+            server.Connect(client);
+            
             client.Registration();
-            server.GetDataFromClient(client.username, client.s, client.v);
         }
     }
 }

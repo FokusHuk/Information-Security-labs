@@ -6,12 +6,15 @@ namespace InfSec.SRP
 {
     public class SRPClient
     {
-        public string s { get; private set; }
-        public BigInteger x { get; private set; }
-        private SRPFactors factors { get; }
-        public string username { get; }
-        public string password { get; }
-        public BigInteger v { get; private set; }
+        private SRPFactors factors;
+        private SRPServer server;
+
+        private string username;
+        private string password;
+        
+        private string s;
+        private BigInteger x;
+        private BigInteger v;
         
         public SRPClient(SRPFactors factors, string username, string password)
         {
@@ -20,11 +23,18 @@ namespace InfSec.SRP
             this.password = password;
         }
 
+        public void Connect(SRPServer server)
+        {
+            this.server = server;
+        }
+
         public void Registration()
         {
             generateS();
             x = factors.ShaHashing.GenerateSha512Hash(mixPassword());
             v = BigInteger.ModPow(factors.g, x, factors.N);
+
+            server.RegisterClient(username, s, v);
         }
 
         private void generateS()

@@ -5,8 +5,11 @@ namespace InfSec.SRP
     public class SRPServer
     {
         private SRPFactors factors;
+        private SRPClient client;
+        
         private string username;
         private string s;
+        
         private BigInteger v;
 
         public SRPServer(SRPFactors factors)
@@ -14,7 +17,12 @@ namespace InfSec.SRP
             this.factors = factors;
         }
 
-        public void GetDataFromClient(string username, string s, BigInteger v)
+        public void Connect(SRPClient client)
+        {
+            this.client = client;
+        }
+
+        public void RegisterClient(string username, string s, BigInteger v)
         {
             this.username = username;
             this.s = s;
