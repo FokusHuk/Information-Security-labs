@@ -27,11 +27,13 @@ namespace InfSec.SRP
             {
                 while(!SimpleNumbersGenerator.MillerRabinTest(q, 5))
                 {
-                    q = random.Next(1000000000);
+                    q = random.Next(10000);
                 }
 
                 N = 2 * q + 1;
             } while(!SimpleNumbersGenerator.MillerRabinTest(N, 5));
+
+            Console.WriteLine("N calculated");
         }
     }
 }

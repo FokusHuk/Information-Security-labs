@@ -19,6 +19,7 @@
             server.Connect(client);
             
             client.Registration();
+            client.Authentication();
         }
     }
 }
