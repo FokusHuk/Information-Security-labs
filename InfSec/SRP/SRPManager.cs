@@ -12,6 +12,11 @@
         public override void Execute()
         {
             var factors = new SRPFactors(100000000, 3);
+            var client = new SRPClient(factors, "user", "password");
+            var server = new SRPServer(factors);
+            
+            client.Registration();
+            server.GetDataFromClient(client.username, client.s, client.v);
         }
     }
 }
