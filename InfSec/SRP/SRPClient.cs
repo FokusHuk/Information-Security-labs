@@ -37,8 +37,10 @@ namespace InfSec.SRP
             generateS();
             x = ShaHashing.GenerateSha512Hash(s + password);
             v = BigInteger.ModPow(factors.g, x, factors.N);
-
+            
             server.RegisterClient(username, s, v);
+            
+            SRPManager.DisplayRegistration(s, x, v);
         }
 
         public void Authentication()
@@ -46,6 +48,8 @@ namespace InfSec.SRP
             var random = new Random();
             BigInteger a = random.Next(int.MaxValue / 2, int.MaxValue);
             A = BigInteger.ModPow(factors.g, a, factors.N);
+            
+            SRPManager.DisplayAuthenticationBeforeSending(a, A);
 
             var response = server.AuthenticateClient(username, A);
             B = response.B;
@@ -63,6 +67,8 @@ namespace InfSec.SRP
                 factors.N);
 
             K = ShaHashing.GenerateSha512Hash(S.ToString());
+            
+            SRPManager.DisplayAuthenticationAfterSending(u, S, K);
             
             GenerateConfirmation();
         }
@@ -83,8 +89,8 @@ namespace InfSec.SRP
             
             if (clientR != serverR)
                 throw new ConfirmationFailedException();
-
-            Console.WriteLine("Success!");
+            
+            SRPManager.DisplayConfirmationOnClientSide(clientR);
         }
 
         private void generateS()

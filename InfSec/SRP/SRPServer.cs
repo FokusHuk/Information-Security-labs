@@ -50,6 +50,8 @@ namespace InfSec.SRP
 
             K = ShaHashing.GenerateSha512Hash(S.ToString());
             
+            SRPManager.DisplayAuthenticationOnServerSide(b, B, u, S, K);
+            
             return new ServerAuthResponse(s, B);
         }
 
@@ -67,6 +69,8 @@ namespace InfSec.SRP
 
             var R = ShaHashing.GenerateSha512Hash(
                 A.ToString() + serverM.ToString() + K.ToString());
+            
+            SRPManager.DisplayConfirmationOnServerSide(clientM, serverM, R);
 
             return R;
         }
