@@ -6,10 +6,10 @@ namespace InfSec.SRP
     public class SRPFactors
     {
         public BigInteger N { get; private set; }
-        public int g { get; }
-        public int k { get; }
+        public BigInteger g { get; }
+        public BigInteger k { get; }
 
-        public SRPFactors(int g, int k)
+        public SRPFactors(BigInteger g, BigInteger k)
         {
             this.g = g;
             this.k = k;
@@ -19,7 +19,7 @@ namespace InfSec.SRP
         private void CalculateN()
         {
             var random = new Random();
-            BigInteger q = 0;
+            BigInteger q;
 
             do
             {

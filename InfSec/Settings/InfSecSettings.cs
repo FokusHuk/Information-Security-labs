@@ -5,12 +5,18 @@ namespace InfSec
 {
     public class InfSecSettings
     {
-        public InfSecSettings(CaesarSettings caesar, DHSettings dh, RSASettings rsa, int millerRabinTestIterationsCount)
+        public InfSecSettings(
+            CaesarSettings caesar, 
+            DHSettings dh, 
+            RSASettings rsa, 
+            int millerRabinTestIterationsCount, 
+            SRPSettings srp)
         {
             Caesar = caesar;
             DH = dh;
             RSA = rsa;
             MillerRabinTestIterationsCount = millerRabinTestIterationsCount;
+            SRP = srp;
         }
         
         public static InfSecSettings FromJsonFile(string filePath)
@@ -26,5 +32,6 @@ namespace InfSec
         public CaesarSettings Caesar { get; }
         public DHSettings DH { get; }
         public RSASettings RSA { get; }
+        public SRPSettings SRP { get; }
     }
 }

@@ -14,7 +14,7 @@ namespace InfSec.SRP
         
         public override void Execute()
         {
-            var factors = new SRPFactors(100000000, 3);
+            var factors = new SRPFactors(_settings.SRP.g, _settings.SRP.k);
 
             Console.WriteLine($"SRP Factors:\ng: {factors.g}\nk: {factors.k}\nN: {factors.N}\n");
             
