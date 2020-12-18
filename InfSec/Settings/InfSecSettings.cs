@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace InfSec
+namespace InfSec.Settings
 {
     public class InfSecSettings
     {

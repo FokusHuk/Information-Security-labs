@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace InfSec
+namespace InfSec.RSA
 {
     public class AlgorithmRSA
     {

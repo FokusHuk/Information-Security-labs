@@ -1,4 +1,4 @@
-﻿namespace InfSec
+﻿namespace InfSec.Settings
 {
     public class CaesarSettings
     {

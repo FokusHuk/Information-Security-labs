@@ -2,6 +2,7 @@
 using InfSec.Caesar;
 using InfSec.DH;
 using InfSec.RSA;
+using InfSec.Settings;
 using InfSec.SRP;
 
 namespace InfSec

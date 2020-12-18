@@ -1,4 +1,6 @@
-﻿namespace InfSec
+﻿using InfSec.Settings;
+
+namespace InfSec
 {
     public abstract class EncryptionAlgorithmManager
     {

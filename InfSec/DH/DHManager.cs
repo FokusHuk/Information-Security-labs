@@ -1,4 +1,5 @@
 ﻿using System;
+using InfSec.Settings;
 
 namespace InfSec.DH
 {
