@@ -9,7 +9,7 @@ namespace InfSec.SRP
         private SRPClient client;
         
         private string username;
-        private BigInteger s;
+        private string s;
         
         private BigInteger v;
         
@@ -28,10 +28,10 @@ namespace InfSec.SRP
             this.client = client;
         }
 
-        public void RegisterClient(string username, BigInteger s, BigInteger v)
+        public void RegisterClient(string username, string s, BigInteger v)
         {
             this.username = username;
-            this.s = ShaHashing.CreateBigInteger(ShaHashing.ToHexString(s), 16);
+            this.s = s;
             this.v = v;
         }
 
@@ -42,45 +42,45 @@ namespace InfSec.SRP
             
             this.A = A;
             var random = new Random();
-            BigInteger b = ShaHashing.GeneratePseudoPrime(128, 100, new Random());
-            B = BigInteger.Add(
-                BigInteger.Multiply(factors.k, v),
-                BigInteger.ModPow(factors.g, b, factors.N));
+            BigInteger b = random.Next(1000000000);
+            B = BigInteger.ModPow(
+                factors.k * v + BigInteger.ModPow(factors.g, b, factors.N), 
+                1, 
+                factors.N);
             
-
-            var u = ShaHashing.CreateBigInteger(256, new Random());
+            var u = factors.ShaHashing.GenerateSha512Hash(A.ToString() + B.ToString());
             if (u == 0)
                 throw new ConnectionInterruptedException();
 
             S = BigInteger.ModPow(
-                BigInteger.Multiply(
-                    BigInteger.ModPow(v, u, factors.N),
-                    A),
-                b,
+                BigInteger.Pow(
+                    A * BigInteger.ModPow(v, u, factors.N),
+                    (int) b),
+                1,
                 factors.N);
 
-            K = new BigInteger(ShaHashing.GenerateSha512Hash(S.ToByteArray()));
+            K = factors.ShaHashing.GenerateSha512Hash(S.ToString());
             
             return new ServerAuthResponse(s, B);
         }
 
-        //public BigInteger ConfirmClientAccess(BigInteger clientM)
-        //{
-        //    var serverM = ShaHashing.GenerateSha512Hash(
-        //        XOR(
-        //            ShaHashing.GenerateSha512Hash(factors.N.ToString()).ToByteArray(),
-        //            ShaHashing.GenerateSha512Hash(factors.g.ToString()).ToByteArray())
-        //        + ShaHashing.GenerateSha512Hash(username)
-        //        + S + A.ToString() + B.ToString() + factors.k);
-//
-        //    if (serverM != clientM)
-        //        throw new ConfirmationFailedException();
-//
-        //    var R = ShaHashing.GenerateSha512Hash(
-        //        A.ToString() + serverM.ToString() + K.ToString());
-//
-        //    return R;
-        //}
+        public BigInteger ConfirmClientAccess(BigInteger clientM)
+        {
+            var serverM = factors.ShaHashing.GenerateSha512Hash(
+                XOR(
+                    factors.ShaHashing.GenerateSha512Hash(factors.N.ToString()).ToByteArray(),
+                    factors.ShaHashing.GenerateSha512Hash(factors.g.ToString()).ToByteArray())
+                + factors.ShaHashing.GenerateSha512Hash(username)
+                + S + A.ToString() + B.ToString() + factors.k);
+
+            if (serverM != clientM)
+                throw new ConfirmationFailedException();
+
+            var R = factors.ShaHashing.GenerateSha512Hash(
+                A.ToString() + serverM.ToString() + K.ToString());
+
+            return R;
+        }
         
         private string XOR(byte[] key, byte[] PAN)
         {

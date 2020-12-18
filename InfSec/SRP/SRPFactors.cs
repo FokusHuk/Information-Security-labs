@@ -5,30 +5,29 @@ namespace InfSec.SRP
 {
     public class SRPFactors
     {
+        public ShaHashing ShaHashing { get; }
         public BigInteger N { get; private set; }
-        public BigInteger g { get; }
-        public BigInteger k { get; }
-        
-        private static Random _random = new Random();
+        public int g { get; }
+        public int k { get; }
 
-        public SRPFactors(int gg, int kk)
+        public SRPFactors(int g, int k)
         {
-            string modulus = "20E176988FD33DE7AE0D296BF805A49F3F45B92FB59036DCC9F0624B89B2DB67";
-            N = ShaHashing.CreateBigInteger(modulus, 16);
-            g = ShaHashing.CreateBigInteger("" + 10, 10);
-            k = ShaHashing.CreateBigInteger("3", 10);
+            this.g = g;
+            this.k = k;
+            ShaHashing = new ShaHashing();
+            CalculateN();
         }
 
         private void CalculateN()
         {
-            BigInteger q;
+            var random = new Random();
+            BigInteger q = 0;
 
             do
             {
-                q = 0;
                 while(!SimpleNumbersGenerator.MillerRabinTest(q, 5))
                 {
-                    q = _random.Next(int.MaxValue / 2, int.MaxValue);
+                    q = random.Next(10000);
                 }
 
                 N = 2 * q + 1;
