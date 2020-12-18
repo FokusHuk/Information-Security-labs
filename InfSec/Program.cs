@@ -1,6 +1,7 @@
 ﻿using System;
 using InfSec.Caesar;
 using InfSec.DH;
+using InfSec.Infrastructure;
 using InfSec.RSA;
 using InfSec.Settings;
 using InfSec.SRP;

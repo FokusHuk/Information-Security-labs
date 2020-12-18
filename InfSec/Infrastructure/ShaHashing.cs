@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace InfSec.SRP
+namespace InfSec.Infrastructure
 {
     public static class ShaHashing
     {

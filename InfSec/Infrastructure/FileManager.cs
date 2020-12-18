@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace InfSec
+namespace InfSec.Infrastructure
 {
     public static class FileManager
     {

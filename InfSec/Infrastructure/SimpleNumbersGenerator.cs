@@ -3,7 +3,7 @@ using System.Numerics;
 using System.Security.Cryptography;
 using InfSec.Settings;
 
-namespace InfSec
+namespace InfSec.Infrastructure
 {
     public static class SimpleNumbersGenerator
     {

@@ -1,6 +1,6 @@
 ﻿using InfSec.Settings;
 
-namespace InfSec
+namespace InfSec.Infrastructure
 {
     public abstract class EncryptionAlgorithmManager
     {

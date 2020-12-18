@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Numerics;
+using InfSec.Infrastructure;
+using InfSec.SRP.Exceptions;
 
 namespace InfSec.SRP
 {

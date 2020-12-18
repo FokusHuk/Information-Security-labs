@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InfSec.SRP
+namespace InfSec.SRP.Exceptions
 {
     public class ConnectionInterruptedException: Exception
     {
