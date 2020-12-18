@@ -11,7 +11,7 @@ namespace InfSec.SRP
             SHA512 sha512 = SHA512Managed.Create();
             byte[] bytes = Encoding.UTF8.GetBytes(inputString);
             byte[] hash = sha512.ComputeHash(bytes);
-            return new BigInteger(hash);
+            return BigInteger.Abs(new BigInteger(hash));
         }
     }
 }

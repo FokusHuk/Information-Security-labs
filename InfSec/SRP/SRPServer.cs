@@ -42,21 +42,16 @@ namespace InfSec.SRP
             
             this.A = A;
             var random = new Random();
-            BigInteger b = random.Next(1000000000);
-            B = BigInteger.ModPow(
-                factors.k * v + BigInteger.ModPow(factors.g, b, factors.N), 
-                1, 
-                factors.N);
-            
-            var u = factors.ShaHashing.GenerateSha512Hash(A.ToString() + B.ToString());
+            BigInteger b = random.Next(int.MaxValue / 2, int.MaxValue);
+            B = factors.k * v + BigInteger.ModPow(factors.g, b, factors.N);
+
+            var u = factors.ShaHashing.GenerateSha512Hash(A + B.ToString());
             if (u == 0)
                 throw new ConnectionInterruptedException();
 
             S = BigInteger.ModPow(
-                BigInteger.Pow(
-                    A * BigInteger.ModPow(v, u, factors.N),
-                    (int) b),
-                1,
+                A * BigInteger.ModPow(v, u, factors.N),
+                b,
                 factors.N);
 
             K = factors.ShaHashing.GenerateSha512Hash(S.ToString());

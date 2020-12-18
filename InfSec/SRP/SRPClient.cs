@@ -45,7 +45,7 @@ namespace InfSec.SRP
         public void Authentication()
         {
             var random = new Random();
-            BigInteger a = random.Next(1000000000);
+            BigInteger a = random.Next(int.MaxValue / 2, int.MaxValue);
             A = BigInteger.ModPow(factors.g, a, factors.N);
 
             var response = server.AuthenticateClient(username, A);
@@ -54,15 +54,13 @@ namespace InfSec.SRP
             if (B == 0)
                 throw new AuthenticationFailedException();
 
-            var u = factors.ShaHashing.GenerateSha512Hash(A.ToString() + B.ToString());
+            var u = factors.ShaHashing.GenerateSha512Hash(A + B.ToString());
             if (u == 0)
                 throw new ConnectionInterruptedException();
 
             S = BigInteger.ModPow(
-                BigInteger.Pow(
-                    B - factors.k * BigInteger.ModPow(factors.g, x, factors.N),
-                    (int)(a + BigInteger.Multiply(u,  x))),
-                1,
+                B - factors.k * BigInteger.ModPow(factors.g, x, factors.N),
+                (a + BigInteger.Multiply(u, x)),
                 factors.N);
 
             K = factors.ShaHashing.GenerateSha512Hash(S.ToString());
