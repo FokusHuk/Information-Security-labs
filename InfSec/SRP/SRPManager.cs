@@ -11,7 +11,7 @@
         
         public override void Execute()
         {
-            var factors = new SRPFactors(100000000, 3);
+            var factors = new SRPFactors(10, 3);
             var client = new SRPClient(factors, "user", "password");
             var server = new SRPServer(factors);
             
