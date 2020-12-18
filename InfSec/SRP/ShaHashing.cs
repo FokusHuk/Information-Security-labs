@@ -4,9 +4,9 @@ using System.Text;
 
 namespace InfSec.SRP
 {
-    public class ShaHashing
+    public static class ShaHashing
     {
-        public BigInteger GenerateSha512Hash(string inputString)
+        public static BigInteger GenerateSha512Hash(string inputString)
         {
             SHA512 sha512 = SHA512Managed.Create();
             byte[] bytes = Encoding.UTF8.GetBytes(inputString);

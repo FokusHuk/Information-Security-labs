@@ -5,7 +5,6 @@ namespace InfSec.SRP
 {
     public class SRPFactors
     {
-        public ShaHashing ShaHashing { get; }
         public BigInteger N { get; private set; }
         public int g { get; }
         public int k { get; }
@@ -14,7 +13,6 @@ namespace InfSec.SRP
         {
             this.g = g;
             this.k = k;
-            ShaHashing = new ShaHashing();
             CalculateN();
         }
 
@@ -32,8 +30,6 @@ namespace InfSec.SRP
 
                 N = 2 * q + 1;
             } while (!SimpleNumbersGenerator.MillerRabinTest(N, 5));
-
-            Console.WriteLine("N calculated");
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Numerics;
 
 namespace InfSec.SRP
@@ -36,7 +35,7 @@ namespace InfSec.SRP
         public void Registration()
         {
             generateS();
-            x = factors.ShaHashing.GenerateSha512Hash(s + password);
+            x = ShaHashing.GenerateSha512Hash(s + password);
             v = BigInteger.ModPow(factors.g, x, factors.N);
 
             server.RegisterClient(username, s, v);
@@ -54,7 +53,7 @@ namespace InfSec.SRP
             if (B == 0)
                 throw new AuthenticationFailedException();
 
-            var u = factors.ShaHashing.GenerateSha512Hash(A + B.ToString());
+            var u = ShaHashing.GenerateSha512Hash(A + B.ToString());
             if (u == 0)
                 throw new ConnectionInterruptedException();
 
@@ -63,23 +62,23 @@ namespace InfSec.SRP
                 (a + BigInteger.Multiply(u, x)),
                 factors.N);
 
-            K = factors.ShaHashing.GenerateSha512Hash(S.ToString());
+            K = ShaHashing.GenerateSha512Hash(S.ToString());
             
             GenerateConfirmation();
         }
 
         public void GenerateConfirmation()
         {
-            var M = factors.ShaHashing.GenerateSha512Hash(
+            var M = ShaHashing.GenerateSha512Hash(
                 XOR(
-                    factors.ShaHashing.GenerateSha512Hash(factors.N.ToString()).ToByteArray(),
-                    factors.ShaHashing.GenerateSha512Hash(factors.g.ToString()).ToByteArray())
-                + factors.ShaHashing.GenerateSha512Hash(username)
+                    ShaHashing.GenerateSha512Hash(factors.N.ToString()).ToByteArray(),
+                    ShaHashing.GenerateSha512Hash(factors.g.ToString()).ToByteArray())
+                + ShaHashing.GenerateSha512Hash(username)
                 + S + A.ToString() + B.ToString() + factors.k);
 
             var serverR = server.ConfirmClientAccess(M);
             
-            var clientR = factors.ShaHashing.GenerateSha512Hash(
+            var clientR = ShaHashing.GenerateSha512Hash(
                 A.ToString() + M.ToString() + K.ToString());
             
             if (clientR != serverR)
@@ -106,8 +105,6 @@ namespace InfSec.SRP
                     s += (char)random.Next('a', 'z');
                 }
             }
-
-            Console.WriteLine("S calculated.");
         }
 
         private string XOR(byte[] key, byte[] PAN)
@@ -123,10 +120,8 @@ namespace InfSec.SRP
                 string hex = BitConverter.ToString(result).Replace("-", "");
                 return hex;
             }
-            else
-            {
-                throw new ArgumentException("Lengths are different");
-            }
+
+            throw new ArgumentException("Lengths are different");
         }
     }
 }

@@ -6,8 +6,7 @@ namespace InfSec.SRP
     public class SRPServer
     {
         private SRPFactors factors;
-        private SRPClient client;
-        
+
         private string username;
         private string s;
         
@@ -21,11 +20,6 @@ namespace InfSec.SRP
         public SRPServer(SRPFactors factors)
         {
             this.factors = factors;
-        }
-
-        public void Connect(SRPClient client)
-        {
-            this.client = client;
         }
 
         public void RegisterClient(string username, string s, BigInteger v)
@@ -45,7 +39,7 @@ namespace InfSec.SRP
             BigInteger b = random.Next(int.MaxValue / 2, int.MaxValue);
             B = factors.k * v + BigInteger.ModPow(factors.g, b, factors.N);
 
-            var u = factors.ShaHashing.GenerateSha512Hash(A + B.ToString());
+            var u = ShaHashing.GenerateSha512Hash(A + B.ToString());
             if (u == 0)
                 throw new ConnectionInterruptedException();
 
@@ -54,24 +48,24 @@ namespace InfSec.SRP
                 b,
                 factors.N);
 
-            K = factors.ShaHashing.GenerateSha512Hash(S.ToString());
+            K = ShaHashing.GenerateSha512Hash(S.ToString());
             
             return new ServerAuthResponse(s, B);
         }
 
         public BigInteger ConfirmClientAccess(BigInteger clientM)
         {
-            var serverM = factors.ShaHashing.GenerateSha512Hash(
+            var serverM = ShaHashing.GenerateSha512Hash(
                 XOR(
-                    factors.ShaHashing.GenerateSha512Hash(factors.N.ToString()).ToByteArray(),
-                    factors.ShaHashing.GenerateSha512Hash(factors.g.ToString()).ToByteArray())
-                + factors.ShaHashing.GenerateSha512Hash(username)
+                    ShaHashing.GenerateSha512Hash(factors.N.ToString()).ToByteArray(),
+                    ShaHashing.GenerateSha512Hash(factors.g.ToString()).ToByteArray())
+                + ShaHashing.GenerateSha512Hash(username)
                 + S + A.ToString() + B.ToString() + factors.k);
 
             if (serverM != clientM)
                 throw new ConfirmationFailedException();
 
-            var R = factors.ShaHashing.GenerateSha512Hash(
+            var R = ShaHashing.GenerateSha512Hash(
                 A.ToString() + serverM.ToString() + K.ToString());
 
             return R;

@@ -16,8 +16,6 @@
             var server = new SRPServer(factors);
             
             client.Connect(server);
-            server.Connect(client);
-            
             client.Registration();
             client.Authentication();
         }
